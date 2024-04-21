@@ -1,11 +1,16 @@
 #include <iostream>
 #include <iomanip>
-#include "tree_formation.h"
+#include <ctime>
+#include <queue>
 
-void BFS(Node* root) {
+using namespace std;
+
+pair<vector<Node*>, double> BFS(Node* root, unsigned maxChildren = 10) {
+    clock_t start = clock(); // record the start time
+    vector<Node*> children;
     queue<Node*> queue;
     int levelNum = 1;
-    if (root == nullptr) return;
+    if (root == nullptr) return {children, 0}; // returns empty if root is empty
     queue.push(root);
     while (!queue.empty()) {
         int size = queue.size();
@@ -14,17 +19,19 @@ void BFS(Node* root) {
             Node* node = queue.front();
             level.push_back(node->val);
             queue.pop();
-            for (int j = 0; j < (node->children).size(); j++) {
+            for (int j = 0; j < (node->children).size(); j++) {a
                 if ((node->children)[j] != nullptr) {
                     queue.push((node->children)[j]);
                 }
             }
         }
-        cout << "Level: " << levelNum << endl;
-        for (int item : level) {
-            cout << item << " ";
-        }
-        cout << endl;
         levelNum++;
     }
+    clock_t end = clock(); // record the end time
+    double elapsed = double(end - start) / CLOCKS_PER_SEC; // calculate elapsed time
+    return {children, elapsed};
+}
+
+pair<vector<Node*>, double> DFS(Node* root, unsigned maxChildren = 10) {
+
 }
