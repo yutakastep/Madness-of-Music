@@ -19,7 +19,7 @@ pair<vector<Node*>, double> BFS(Node* root, unsigned maxChildren = 10) {
             Node* node = queue.front();
             level.push_back(node->val);
             queue.pop();
-            for (int j = 0; j < (node->children).size(); j++) {a
+            for (int j = 0; j < (node->children).size(); j++) {
                 if ((node->children)[j] != nullptr) {
                     queue.push((node->children)[j]);
                 }
