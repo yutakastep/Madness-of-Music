@@ -2,13 +2,15 @@
 #include <sstream>
 #include <vector>
 #include <string>
+#include "tree_formation.h"
+#include "searchAlgorithms.h"
 
 using namespace std;
 
 void readLine(string& line, vector<string>& tokens) {
     istringstream in(line);
     string token;
-    while (getline(ss, token, '|')) {
+    while (getline(in, token, '|')) {
         tokens.push_back(token);
     }
 }
