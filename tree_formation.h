@@ -43,13 +43,10 @@ using namespace std;
 //}
 //
 
-#include <iostream>
-#include <vector>
-
 class TreeNode {
 public:
     int data;
-    std::vector<TreeNode*> children;
+    vector<TreeNode*> children;
 
     TreeNode(int val) : data(val) {}
 
@@ -89,7 +86,6 @@ public:
             TreeNode* found = findNode(child, data);
             if (found) return found;
         }
-
         return nullptr;
     }
 };
