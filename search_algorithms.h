@@ -1,13 +1,14 @@
 #include <iostream>
 #include <iomanip>
-#include <ctime>
+#include <chrono>
 #include <queue>
 #include <stack>
 
 using namespace std;
+using namespace std::chrono;
 
 pair<vector<Node*>, double> BFS(Node* root, unsigned maxChildren = 10) {
-    clock_t start = clock(); // record the start time
+    auto start = high_resolution_clock::now(); // record the start time
     vector<Node*> children;
     queue<Node*> queue;
     int levelNum = 1;
@@ -32,8 +33,8 @@ pair<vector<Node*>, double> BFS(Node* root, unsigned maxChildren = 10) {
         }
         levelNum++;
     }
-    clock_t end = clock(); // record the end time
-    double elapsed = double(end - start) / CLOCKS_PER_SEC; // calculate elapsed time
+    auto end = high_resolution_clock::now(); // record the end time
+    double elapsed = double((end - start).count()); // calculate elapsed time
 
     return {children, elapsed};
 }
@@ -49,13 +50,13 @@ void dfsRecursion(Node* node, vector<Node*>& children, unsigned maxChildren) {
 }
 
 pair<vector<Node*>, double> DFS(Node* root, unsigned maxChildren = 10) {
-    clock_t start = clock(); // record the start time
+    auto start = high_resolution_clock::now(); // record the start time
 
     vector<Node*> children;
     dfsRecursion(root, children, maxChildren); // recursive DFS function
 
-    clock_t end = clock(); // record the end time
-    double elapsed = double(end - start) / CLOCKS_PER_SEC; // calculate elapsed time
+    auto end = high_resolution_clock::now(); // record the end time
+    double elapsed = double((end - start).count()); // calculate elapsed time
 
     return {children, elapsed};
 }
