@@ -40,7 +40,7 @@ vector<string> split(const string& s, char delimiter) {
 }
 
 int main() {
-    ifstream inputFile("ufo_sightings.txt");
+    ifstream inputFile("../ufo_sightings.txt");
     if (!inputFile) {
         cout << "Error opening file." << endl;
         return 1;
