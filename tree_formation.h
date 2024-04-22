@@ -1,23 +1,18 @@
-//
-// Created by yutak on 4/19/2024.
-//
 #include <iostream>
-#include <vector>
+#include <fstream>
 #include <sstream>
+#include <vector>
+#include <unordered_map>
+#include <algorithm>
+
 using namespace std;
 
-class TreeNode {
-public:
-    int data;
-    vector<TreeNode*> children;
-
-    TreeNode(int val) : data(val) {}
-
-    ~TreeNode() {
-        for (TreeNode* child : children) {
-            delete child;
-        }
-    }
+// Node structure for the n-ary tree
+struct TreeNode {
+    string name;
+    unordered_map<string, TreeNode*> children;
+    vector<vector<string>*> data; // Vector of pointers to vectors of data
+    TreeNode(string n) : name(n) {}
 };
 
 class NaryTree {
@@ -25,30 +20,61 @@ private:
     TreeNode* root;
 
 public:
-    NaryTree() : root(nullptr) {}
-
-    ~NaryTree() {
-        delete root;
+    NaryTree() {
+        root = new TreeNode("Global");
     }
 
-    void insert(int parentData, int childData) {
-        if (!root) {
-            root = new TreeNode(parentData);
+    // Insert function to insert data into the n-ary tree
+    void insert(const vector<string>& data) {
+        TreeNode* current = root;
+
+        // Ensure the structure is as expected: country -> state -> city -> vector of data
+        if (data.size() < 3) {
+            cerr << "Invalid data format." << endl;
+            return;
         }
-        TreeNode* parent = findNode(root, parentData);
-        if (parent) {
-            parent->children.push_back(new TreeNode(childData));
+
+        // Insert country
+        string country = data[2];
+        if (current->children.find(country) == current->children.end()) {
+            current->children[country] = new TreeNode(country);
         }
+        current = current->children[country];
+
+        // Insert state
+        string state = data[1];
+        if (current->children.find(state) == current->children.end()) {
+            current->children[state] = new TreeNode(state);
+        }
+        current = current->children[state];
+
+        // Insert city
+        string city = data[0];
+        if (current->children.find(city) == current->children.end()) {
+            current->children[city] = new TreeNode(city);
+        }
+        current = current->children[city];
+
+        // Insert pointer to data vector
+        current->data.push_back(new vector<string>(data.begin(), data.end()));
     }
 
-    TreeNode* findNode(TreeNode* node, int data) {
-        if (!node) return nullptr;
-        if (node->data == data) return node;
-
-        for (TreeNode* child : node->children) {
-            TreeNode* found = findNode(child, data);
-            if (found) return found;
+    // Function to print details of sightings in a city
+    void printCityDetails(const string& country, const string& state, const string& city) {
+        TreeNode* current = root;
+        if (current->children.find(country) == current->children.end() ||
+            current->children[country]->children.find(state) == current->children[country]->children.end() ||
+            current->children[country]->children[state]->children.find(city) == current->children[country]->children[state]->children.end()) {
+            cout << "No sightings found for " << city << ", " << state << ", " << country << endl;
+            return;
         }
-        return nullptr;
+        current = current->children[country]->children[state]->children[city];
+        cout << "Sightings in " << city << ", " << state << ", " << country << ":" << endl;
+        for (vector<string>* ptr : current->data) {
+            for (const string& detail : *ptr) {
+                cout << detail << " | ";
+            }
+            cout << endl;
+        }
     }
 };
