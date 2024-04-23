@@ -4,6 +4,7 @@
 #include <vector>
 #include <unordered_map>
 #include <algorithm>
+#include <cctype>
 
 using namespace std;
 
@@ -18,6 +19,19 @@ struct TreeNode {
 class NaryTree {
 private:
     TreeNode* root;
+
+    // Function to convert a string to lowercase
+    string toLower(string s) {
+        transform(s.begin(), s.end(), s.begin(), ::tolower);
+        return s;
+    }
+
+    // Function to convert a string to uppercase
+    string toUpper(string s) {
+        string result = s;
+        transform(s.begin(), s.end(), s.begin(), ::toupper);
+        return result;
+    }
 
 public:
     NaryTree() {
@@ -76,5 +90,25 @@ public:
             }
             cout << endl;
         }
+    }
+
+    // Function to retrieve the node corresponding to a city
+    TreeNode* getNode(const string& state, const string& city) {
+        string lState = toUpper(state);
+        string lCity = toLower(city);
+        TreeNode* current = root;
+        if (current->children.find(lState) == current->children.end() ||
+            current->children[lState]->children.find(lCity) == current->children[lState]->children.end()) {
+            return nullptr; // City not found
+        }
+        return current->children[lState]->children[lCity];
+    }
+
+    // Function to check if a city exists (case-insensitive)
+    bool checkCity(const string& state, const string& city) {
+        string lState = toUpper(state);
+        string lCity = toLower(city);
+        TreeNode* node = getNode(lState, lCity);
+        return node != nullptr;
     }
 };
